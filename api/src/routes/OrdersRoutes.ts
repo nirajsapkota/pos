@@ -1,5 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
+import { CreateDineInOrder, CreateTakeawayOrder, CreateDeliveryOrder, GetOrders, UpdateOrder, DeleteOrder } from "../controllers/OrdersControllers";
 
 const router = express.Router();
 
@@ -11,8 +12,12 @@ const router = express.Router();
  * @param Array<ProductSchema> cart => What the table has ordered.
  * @param ?Boolean => If the order has been paid for or not.
  */
-router.post("/order/dine-in", (req: Request, res: Response) => {
-  res.send("Orders POST!");
+router.post("/order/dine-in", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await CreateDineInOrder(req.body);
+  res.status(status).json({ message: message });
+
 });
 
 /* CREATE a takeaway order.
@@ -22,8 +27,12 @@ router.post("/order/dine-in", (req: Request, res: Response) => {
  * @param Array<ProductSchema> cart => The products that have been ordered for takeaway.
  * @param Boolean paid => Whether the takeaway has been paid for or not.
  */
-router.post("/order/takeaway", (req: Request, res: Response) => {
-  res.send("Orders POST!");
+router.post("/order/takeaway", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await CreateTakeawayOrder(req.body);
+  res.status(status).json({ message: message });
+
 });
 
 /* CREATE a delivery order.
@@ -33,17 +42,25 @@ router.post("/order/takeaway", (req: Request, res: Response) => {
  * @param Array<ProductSchema> cart => The products that have been ordered for delivery.
  * @param Boolean paid => Whether the delivery has been paid for or not.
  */
-router.post("/order/delivery", (req: Request, res: Response) => {
-  res.send("Orders POST!");
+router.post("/order/delivery", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await CreateDeliveryOrder(req.body);
+  res.status(status).json({ message: message });
+
 });
 
 /* READ get a list of orders, optionally filtered.
  *
  * @param ?Array<String> filters => The options to filter by.
- * Filters: ["paid", "not paid"]
+ * Filters: ["paid", "not paid", "dine-in", "takeaway", "delivery"]
  */
-router.get("/orders", (req: Request, res: Response) => {
-  res.send("Orders GET!");
+router.get("/orders", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await GetOrders();
+  res.status(status).json({ message: message });
+
 });
 
 /* UPDATE an order's details.
@@ -52,16 +69,24 @@ router.get("/orders", (req: Request, res: Response) => {
  * @param ?(DineInOrderSchema|TakeawayOrderSchema|DeliveryOrderSchema) order => The
  *    updated details for the order.
  */
-router.put("/orders", (req: Request, res: Response) => {
-  res.send("Orders PUT!");
+router.put("/orders", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await UpdateOrder(req.body);
+  res.status(status).json({ message: message });
+
 });
 
 /* DELETE
  *
  * @param ObjectID id => The id of the order that should be deleted.
  */
-router.delete("/orders", (req: Request, res: Response) => {
-  res.send("Orders DELETE!");
+router.delete("/orders", async (req: Request, res: Response) => {
+
+  /* TODO: Check correctness of input */
+  const [status, message] = await DeleteOrder(req.body);
+  res.status(status).json({ message: message });
+
 })
 
 export default router;

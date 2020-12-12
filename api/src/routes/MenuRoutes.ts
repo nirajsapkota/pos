@@ -1,5 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
+import { CreateMenuGroup, AddProductToMenuGroup, RemoveProductFromMenuGroup, GetMenuGroups, UpdateMenuGroups, DeleteMenuGroup } from "../controllers/MenuControllers";
 
 const router = express.Router();
 
@@ -14,57 +15,69 @@ const router = express.Router();
  *
  * @param String name => The name of the menu group.
  */
-router.post("/menu", (req: Request, res: Response) => {
-  res.send("[POST] Create a Menu Group!");
+router.post("/menu", async (req: Request, res: Response) => {
+
+  const [status, message] = await CreateMenuGroup(req.body);
+  res.status(status).json({ message: message });
+
+});
+
+/* ADD a product to a menu group.
+ *
+ * @param String id => The id of the menu group to add the product to.
+ * @param String name => The name of the product.
+ * @param Number price => The price of the product.
+ */
+router.post("/menu/add-product", async (req: Request, res: Response) => {
+
+  const [status, message] = await AddProductToMenuGroup(req.body);
+  res.status(status).json({ message: message });
+
+});
+
+/* REMOVE a product from a menu group.
+ *
+ * @param String menuGroupID => The id of the menu group to remove the product from.
+ * @param String productID => The id of the product to remove.
+ */
+router.post("/menu/remove-product", async (req: Request, res: Response) => {
+
+  const [status, message] = await RemoveProductFromMenuGroup(req.body);
+  res.status(status).json({ message: message });
+
 });
 
 /* READ return a list of all menu groups.
  *
  */
-router.get("/menu/groups", (req: Request, res: Response) => {
-  res.send("[GET] Retreive Menu Groups!");
+router.get("/menu", async (req: Request, res: Response) => {
+
+  const [status, message, groups] = await GetMenuGroups();
+  res.status(status).json({ message: message, groups: groups });
+
 });
 
-/* READ a list of all products within a menu group.
- * 
- * @param ObjectID id => The id of the menu group whose products to read.
- */
-router.get("/menu/products", (req: Request, res: Response) => {
-  res.send("[GET] Retreive Group Products!");
-});
-
-/* UPDATE a menu group's name.
+/* UPDATE a menu group.
  *
  * @param ObjectID id => The id of the menu group to rename.
  * @param String newName => The name you would like to give to the menu group.
  */
-router.put("/menu/rename-group", (req: Request, res: Response) => {
-  res.send("[PUT] Rename Menu Group!");
-});
+router.put("/menu", async (req: Request, res: Response) => {
 
-/* UPDATE a menu group's products -- add a product.
- * 
- * @param ObjectID id => The id of the menu group to add the product to.
- * @param Object {name: String, price: Number} product => The product to add.
- */
-router.put("/menu/add-product", (req: Request, res: Response) => {
-  res.send("[PUT] Menu Product Add!");
-});
+  const [status, message] = await UpdateMenuGroups(req.body);
+  res.status(status).json({ message: message });
 
-/* UPDATE a menu group's products -- remove a product.
- *
- * @param ObjectID id => The id of the product to remove.
- */
-router.put("/menu/remove-product", (req: Request, res: Response) => {
-  res.send("[PUT] Menu Product Remove!");
 });
 
 /* DELETE a menu group document from the collection.
  *
  * @param ObjectID id => The id of the menu group to delete.
  */
-router.delete("/menu", (req: Request, res: Response) => {
-  res.send("[DELETE] Menu Group Delete!");
+router.delete("/menu", async (req: Request, res: Response) => {
+
+  const [status, message] = await DeleteMenuGroup(req.body);
+  res.status(status).json({ message: message });
+
 })
 
 export default router;
